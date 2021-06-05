@@ -11,7 +11,7 @@
     </div>
   <% end %>
 
-  <div class="">
+  <div class="form-group">
     <%= form.label :upload_resume %>
     <%= form.file_field :file %>
   </div>
@@ -19,6 +19,6 @@
   <br />
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit :Submit, class: 'btn btn-primary'%>
   </div>
 <% end %>

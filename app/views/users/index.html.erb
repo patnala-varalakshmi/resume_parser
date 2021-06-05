@@ -2,13 +2,13 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6">
-      <h5>List</h5>
+      <h5>Candidates</h5>
     </div>
 
     <div class="col-md-6 mb-2">
-      <button type="button" class="btn btn-primary float-right">
-        <a href="<%= new_resume_path %>" class="text-white"><i class="mr-1 fas fa-plus"></i>Add Resume</a>
-      </button>
+      <a href="<%= new_resume_path %>" class="text-white">
+        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#myModal"><i class="mr-1 fas fa-plus"></i>Add Resume</button>
+      </a>
     </div>
   </div>
 
@@ -20,8 +20,8 @@
             <th scope="col">id</th>
             <th scope="col">Name</th>
             <th scope="col">Resume</th>
-            <th scope="col">Preview</th>
-            <th scope="col">Delete</th>
+            <th scope="col">Email</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -30,17 +30,16 @@
             <td>1</td>
             <td><%= user.name %></td>
             <td>
-		          <%= link_to 'Download', url_for(user.resume&.file) %>
+		          <%= link_to user.resume.file_name, url_for(user.resume.file) %>
             </td>
             <td><%= user.email %></td>
             <td>
-              <button type="button" class="btn btn-primary">
-                <a href="<%= edit_user_path(user.id) %>"><i class="far fa-eye"></i></a>
-              </button>
-              <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
-               <button type="button" class="btn btn-danger">
-                <a rel="nofollow" data-method="delete" href="<%=resume_url(user.resume&.id)%>" class="text-white"><i class="far fa-trash-alt"></i></a>
-              </button>
+              <a href="<%= edit_user_path(user.id) %>">
+                <button type="button" class="btn btn-primary"><i class="far fa-eye"></i></button>
+              </a>
+              <a rel="nofollow" data-method="delete" href="<%=resume_url(user.resume.id)%>" class="text-white">
+                <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+              </a>
             </td>
           </tr>
           <% end %>
@@ -49,3 +48,7 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+ $('#myModal').modal()
+</script>

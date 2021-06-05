@@ -51,7 +51,7 @@ class ResumesController < ApplicationController
   def destroy
     @resume.destroy
     respond_to do |format|
-      format.html { redirect_to resumes_url, notice: "Resume was successfully destroyed." }
+      format.html { redirect_to users_url, notice: "Resume was successfully destroyed." }
       format.json { head :no_content }
     end
   end

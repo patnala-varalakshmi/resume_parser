@@ -1,0 +1,51 @@
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <h5>List</h5>
+    </div>
+
+    <div class="col-md-6 mb-2">
+      <button type="button" class="btn btn-primary float-right">
+        <a href="<%= new_resume_path %>" class="text-white"><i class="mr-1 fas fa-plus"></i>Add Resume</a>
+      </button>
+    </div>
+  </div>
+
+    <div class="col-12 p-1">
+
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Resume</th>
+            <th scope="col">Preview</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td>1</td>
+            <td><%= user.name %></td>
+            <td>
+		          <%= link_to 'Download', url_for(user.resume&.file) %>
+            </td>
+            <td><%= user.email %></td>
+            <td>
+              <button type="button" class="btn btn-primary">
+                <a href="<%= edit_user_path(user.id) %>"><i class="far fa-eye"></i></a>
+              </button>
+              <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
+               <button type="button" class="btn btn-danger">
+                <a rel="nofollow" data-method="delete" href="<%=resume_url(user.resume&.id)%>" class="text-white"><i class="far fa-trash-alt"></i></a>
+              </button>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

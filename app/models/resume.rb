@@ -1,44 +1,31 @@
+require 'docx'
+
 class Resume < ApplicationRecord
- include PromptAPI
 
- has_one :user, dependent: :destroy
- has_one_attached :file
- validates :file, presence: true
+  VALID_PHONE_NUMBER_REGEX = (/(^| )(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}( |$)/)
+  VALID_EMAIL_REGEX = (/\w+@[\w.-]+|\{(?:\w+, *)+\w+\}@[\w.-]+/)
 
- after_create :parse_uploaded_resume
+  has_one :user, dependent: :destroy
+  has_one_attached :file
+  validates :file, presence: true
 
- def parse_uploaded_resume
-    return unless file.attached?
+  after_create :parse_resume
 
-    file_path = Rails.application.routes.url_helpers.url_for(file)
- 	  response = PromptAPI.parse_resume(file_path)
-    if response[:status] == "200"
-      create_related_records(response)
-    else
-      errors.add(:internal_error, "unable to create user.")
+  def file_path
+    ActiveStorage::Blob.service.path_for(file.key)
+  end
+
+  def parse_resume
+    doc = Docx::Document.open(file_path)
+    @name = File.basename(file_name.to_s, ".*").split('_')[0]
+    doc.paragraphs.each do |p|
+      @email =  p.to_s.match(VALID_EMAIL_REGEX) if p.to_s.match(VALID_EMAIL_REGEX)
+      @phone_number =  p.to_s.match(VALID_PHONE_NUMBER_REGEX) if p.to_s.match(VALID_PHONE_NUMBER_REGEX)
     end
- end
+    User.create!(name: @name, email: @email, phone_number: @phone_number, resume_id: id)
+  end
 
- def file_name
-  file.blob.filename
- end
-
- def create_related_records(response)
-    user_params = {
-        name: response[:name],
-        email: response[:email],
-        skills: response[:skills],
-        phone_number: response[:phone_number],
-        resume_id: id
-    }
-    user = User.create!(user_params)
-
-    response['experience'].each do |employment|
-      user.employment_details.create!(employment)
-    end
-
-    response['education'].each do |education|
-      user.education_details.create!(education)
-    end
- end
+  def file_name
+    file.blob.filename
+  end
 end

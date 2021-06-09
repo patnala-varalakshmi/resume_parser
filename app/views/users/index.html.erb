@@ -1,4 +1,3 @@
-
 <div class="container">
   <div class="row">
     <div class="col-md-6">
@@ -17,29 +16,15 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th scope="col">id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Resume</th>
-            <th scope="col">Email</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-        <% @users.each do |user| %>
+        <% @resumes.each do |resume| %>
           <tr>
-            <td>1</td>
-            <td><%= user.name %></td>
             <td>
-		          <%= link_to user.resume.file_name, url_for(user.resume.file) %>
+		          <%= link_to resume.file_name, url_for(resume.file) %>
             </td>
-            <td><%= user.email %></td>
-            <td>
-              <a href="<%= edit_user_path(user.id) %>">
-                <button type="button" class="btn btn-primary"><i class="far fa-eye"></i></button>
-              </a>
-              <a rel="nofollow" data-method="delete" href="<%=resume_url(user.resume.id)%>" class="text-white">
-                <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-              </a>
             </td>
           </tr>
           <% end %>
